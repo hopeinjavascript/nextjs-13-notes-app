@@ -2,6 +2,7 @@ import useFetch from '@/utils/fetchApi';
 import React, { useState, useEffect } from 'react';
 
 import styles from '@/styles/Notes.module.css';
+import Link from 'next/link';
 
 const notes = () => {
   // read
@@ -59,6 +60,20 @@ const notes = () => {
     }
   };
 
+  const deleteNote = async (noteId) => {
+    const { error, resp } = await fetchApi(`/api/notes/${noteId}`, 'DELETE', {
+      body: { noteId },
+    });
+
+    if (error) {
+      console.error(resp);
+      setError(true);
+    } else {
+      const updatedNotes = notes.filter((note) => note.id !== resp.data.id);
+      setNotes(updatedNotes);
+    }
+  };
+
   return (
     <div className={styles.notes_wrapper}>
       {/* <h1 className={styles.heading}>Your notes</h1> */}
@@ -87,15 +102,21 @@ const notes = () => {
           notes.map((note) => {
             return (
               <div className={styles.note} key={note.id}>
-                <h1 className={styles.text}>{note.text}</h1>
-                <p>
-                  {note.desc.length > 50
-                    ? `${note.desc.substring(0, 50)}...`
-                    : note.desc}
-                </p>
-                <p>status - {note.status}</p>
-                <p>createdBy - {note.createdBy}</p>
+                <div className={styles.note_content}>
+                  <h1 className={styles.text}>{note.text}</h1>
+
+                  <p>
+                    {note.desc.length > 50
+                      ? `${note.desc.substring(0, 50)}...`
+                      : note.desc}
+                  </p>
+                  <p>status - {note.status}</p>
+                  <p>createdBy - {note.createdBy}</p>
+                </div>
                 {/* <hr /> */}
+                <div className={styles.note_cta}>
+                  <button onClick={() => deleteNote(note.id)}>Delete</button>
+                </div>
               </div>
             );
           })

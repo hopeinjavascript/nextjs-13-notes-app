@@ -18,7 +18,6 @@
 }
 
 .note {
-  padding: 1rem;
   border: 2px solid #ccc;
   width: 250px;
   border-radius: 8px;
@@ -31,4 +30,22 @@
 .notes_form {
   text-align: center;
   margin: 2rem;
+}
+
+.note_content {
+  padding: 1rem;
+}
+
+.note_cta {
+  border-top: 1px solid #ccc;
+  padding: 0 1rem;
+}
+
+.note_cta button {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.note_cta button:not(:last-child) {
+  margin-right: 1rem;
 }
