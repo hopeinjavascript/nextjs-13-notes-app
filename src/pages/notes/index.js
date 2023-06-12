@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '@/styles/Notes.module.css';
 import Link from 'next/link';
 
-const notes = () => {
+const Notes = () => {
   // read
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -128,4 +128,4 @@ const notes = () => {
   );
 };
 
-export default notes;
+export default Notes;
