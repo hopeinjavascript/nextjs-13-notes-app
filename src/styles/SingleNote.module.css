@@ -1,0 +1,21 @@
+.note {
+  width: 80%;
+  margin: 2rem auto;
+}
+
+.text {
+  font-size: 4rem;
+}
+
+.desc {
+  font-size: 18px;
+  margin-top: 1rem;
+}
+
+.status {
+  padding: 0.15rem 0.5rem;
+  border-radius: 25px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
