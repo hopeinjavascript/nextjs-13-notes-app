@@ -103,7 +103,9 @@ const notes = () => {
             return (
               <div className={styles.note} key={note.id}>
                 <div className={styles.note_content}>
-                  <h1 className={styles.text}>{note.text}</h1>
+                  <Link href={`/notes/${note.id}`}>
+                    <h1 className={styles.text}>{note.text}</h1>
+                  </Link>
 
                   <p>
                     {note.desc.length > 50
