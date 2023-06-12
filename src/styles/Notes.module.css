@@ -1,6 +1,8 @@
 .notes_wrapper {
   width: 80%;
   margin: 2rem auto;
+  min-height: 100vh;
+  position: relative;
 }
 
 .heading {
@@ -11,6 +13,7 @@
 .notes_container {
   display: flex;
   justify-content: space-between;
+  gap: 2rem 1rem;
   flex-wrap: wrap;
 }
 
@@ -23,4 +26,9 @@
 
 .text {
   font-size: 2rem;
+}
+
+.notes_form {
+  text-align: center;
+  margin: 2rem;
 }
