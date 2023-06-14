@@ -8,7 +8,7 @@ export default async function handler(req, res, next) {
     POST: () => {
       console.log(req.body);
       const newNote = {
-        id: notes.length,
+        id: notes.length + 1,
         ...req.body,
         createdBy: req.name,
         createdAt: new Date().toLocaleString(),
