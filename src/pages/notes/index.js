@@ -1,38 +1,14 @@
 import useFetch from '@/utils/fetchApi';
-import React, { useState, useEffect } from 'react';
-
+import { useNotesContext } from '@/context/notes';
 import styles from '@/styles/Notes.module.css';
 import Link from 'next/link';
 
 const Notes = () => {
-  // read
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [notes, setNotes] = useState([]);
+  // context
+  const { loading, error, notes, setNotes } = useNotesContext();
 
   // custom hook
   const fetchApi = useFetch();
-
-  useEffect(() => {
-    async function fetchNotes() {
-      setLoading(true);
-
-      const { error, resp, abortRequest } = await fetchApi('/api/notes');
-
-      if (error) {
-        console.error(resp);
-        setError(true);
-      } else {
-        setNotes(resp.data);
-      }
-    }
-
-    fetchNotes().finally(() => setLoading(false));
-
-    return () => {
-      //   abortRequest();
-    };
-  }, []);
 
   const deleteNote = async (noteId) => {
     const { error, resp } = await fetchApi(`/api/notes/${noteId}`, 'DELETE', {
