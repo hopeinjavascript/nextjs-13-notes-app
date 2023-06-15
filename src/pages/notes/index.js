@@ -10,9 +10,6 @@ const Notes = () => {
   const [error, setError] = useState(false);
   const [notes, setNotes] = useState([]);
 
-  // create
-  const [newNote, setNewNote] = useState('');
-
   // custom hook
   const fetchApi = useFetch();
 
@@ -37,29 +34,6 @@ const Notes = () => {
     };
   }, []);
 
-  const addNote = async (e) => {
-    e.preventDefault();
-    console.log({ newNote });
-
-    const note = {
-      text: newNote,
-      desc: newNote,
-      status: 'new',
-    };
-
-    const { error, resp } = await fetchApi('/api/notes', 'POST', {
-      body: note,
-    });
-
-    if (error) {
-      console.error(resp);
-      setError(true);
-    } else {
-      setNewNote('');
-      setNotes((prevNotes) => [...prevNotes, resp.data]);
-    }
-  };
-
   const deleteNote = async (noteId) => {
     const { error, resp } = await fetchApi(`/api/notes/${noteId}`, 'DELETE', {
       body: { noteId },
@@ -76,22 +50,12 @@ const Notes = () => {
 
   return (
     <div className={styles.notes_wrapper}>
-      {/* <h1 className={styles.heading}>Your notes</h1> */}
-
-      <div className={styles.notes_form}>
-        <form onSubmit={addNote} className={styles.form}>
-          <input
-            type="text"
-            placeholder="Enter a note"
-            value={newNote}
-            onChange={(e) => setNewNote(e.target.value)}
-            // /className={}
-          />
-          <button type="submit" className="btn_primary">
-            Add
-          </button>
-        </form>
-      </div>
+      <header className={styles.notes_header}>
+        <h1 className={styles.heading}>Your notes</h1>
+        <Link href="/notes/create">
+          <button className="btn_outline">Create note</button>
+        </Link>
+      </header>
 
       <div className={styles.notes_container}>
         {loading && <h1>Loading...</h1>}
