@@ -47,7 +47,7 @@ const Notes = () => {
                     <h1 className={styles.text}>{note.text}</h1>
                   </Link>
 
-                  <p>
+                  <p className={styles.desc}>
                     {note.desc.length > 50
                       ? `${note.desc.substring(0, 50)}...`
                       : note.desc}
@@ -58,6 +58,16 @@ const Notes = () => {
                 {/* <hr /> */}
                 <div className={styles.note_cta}>
                   <button onClick={() => deleteNote(note.id)}>Delete</button>
+                  <Link
+                    href={{
+                      pathname: `/notes/create`,
+                      // search: { noteId: note.id },
+                      query: note,
+                    }}
+                    as={`/notes/edit?noteId=${note.id}`}
+                  >
+                    <button>Edit</button>
+                  </Link>
                 </div>
               </div>
             );

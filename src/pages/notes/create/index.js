@@ -3,26 +3,26 @@ import styles from '@/styles/CreateNote.module.css';
 import useFetch from '@/utils/fetchApi';
 import { useNotesContext } from '@/context/notes';
 import { useRouter } from 'next/router'; // OR next/navigation
-import Image from 'next/image';
 
+// Used as edit note component as well
 const CreateNote = () => {
   // context
   const { setNotes } = useNotesContext();
 
+  // for routing programmatically
+  const router = useRouter();
+  const noteId = router.query.id;
+  const note = router.query;
+
   // create
-  const [title, setTitle] = useState(null); // null || ''
-  const [desc, setDesc] = useState(null); // null || ''
+  const [title, setTitle] = useState(note?.text ?? ''); // null || ''
+  const [desc, setDesc] = useState(note?.desc ?? ''); // null || ''
 
   // custom hook
   const fetchApi = useFetch();
 
-  // for routing programmatically
-  const router = useRouter();
-
   const addNote = async (e) => {
     e.preventDefault();
-    console.log({ title, desc });
-    debugger;
     const note = {
       text: title,
       desc: desc,
@@ -44,6 +44,29 @@ const CreateNote = () => {
     }
   };
 
+  const editNote = async (e) => {
+    e.preventDefault();
+
+    const note = {
+      text: title,
+      desc: desc,
+    };
+
+    const { error, resp } = await fetchApi(`/api/notes/${noteId}`, 'PATCH', {
+      body: note,
+    });
+
+    if (error) {
+      console.error(resp);
+      setError(true);
+    } else {
+      setTitle('');
+      setDesc('');
+      router.push('/notes');
+      setNotes(resp.data);
+    }
+  };
+
   return (
     <div className={styles.notes_form_wrapper}>
       {/* <div className={styles.left}>
@@ -56,7 +79,10 @@ const CreateNote = () => {
       </div> */}
       <div className={styles.right}>
         <h1 className="text-4xl mb-5">Create Note</h1>
-        <form onSubmit={addNote} className={styles.notes_form}>
+        <form
+          onSubmit={noteId ? editNote : addNote}
+          className={styles.notes_form}
+        >
           <div className={styles.form_input}>
             <p className={styles.form_label}>Title</p>
             <input
@@ -76,8 +102,8 @@ const CreateNote = () => {
               onChange={(e) => setDesc(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn_primary">
-            Add
+          <button type="submit" className="btn_outline">
+            {noteId ? 'Edit' : 'Add'}
           </button>
         </form>
       </div>

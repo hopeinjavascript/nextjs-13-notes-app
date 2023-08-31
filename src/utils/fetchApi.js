@@ -4,7 +4,7 @@ const getFetchApiOptions = (method, body) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    ...(method !== 'GET' && { body: JSON.stringify(body) }),
+    ...(method !== 'GET' && body && { body: JSON.stringify(body) }),
   };
 };
 
@@ -27,7 +27,7 @@ export default function useFetch() {
       return {
         error: false,
         resp: data,
-        abortRequest: controller.abort(),
+        abortRequest: controller.abort(), // keep a check... is it correct?
       };
     } catch (error) {
       controller.abort();

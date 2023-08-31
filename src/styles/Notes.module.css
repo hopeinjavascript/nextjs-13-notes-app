@@ -25,12 +25,16 @@
 
 .note {
   border: 2px solid #ccc;
-  width: 250px;
+  width: 220px;
   border-radius: 8px;
 }
 
 .text {
   font-size: 2rem;
+}
+
+.desc {
+  color: gray;
 }
 
 .notes_form {
