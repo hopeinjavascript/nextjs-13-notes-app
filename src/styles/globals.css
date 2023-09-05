@@ -52,7 +52,9 @@ button,
   border: 2px solid #ccc;
 }
 
-input[type='text'] {
+input[type='text'],
+input[type='email'],
+input[type='password'] {
   padding: 0.5rem;
   border-radius: 4px;
   color: #252525;
