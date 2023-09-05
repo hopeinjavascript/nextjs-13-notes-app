@@ -7,15 +7,15 @@ import { useRouter } from 'next/router'; // OR next/navigation
 // Used as edit note component as well
 const CreateNote = () => {
   // context
-  const { setNotes } = useNotesContext();
+  const { notes, setNotes, setError } = useNotesContext();
 
   // for routing programmatically
   const router = useRouter();
-  const noteId = router.query.id;
+  const noteId = router.query._id;
   const note = router.query;
 
   // create
-  const [title, setTitle] = useState(note?.text ?? ''); // null || ''
+  const [title, setTitle] = useState(note?.title ?? ''); // null || ''
   const [desc, setDesc] = useState(note?.desc ?? ''); // null || ''
 
   // custom hook
@@ -24,7 +24,7 @@ const CreateNote = () => {
   const addNote = async (e) => {
     e.preventDefault();
     const note = {
-      text: title,
+      title: title,
       desc: desc,
       status: 'new',
     };
@@ -48,7 +48,7 @@ const CreateNote = () => {
     e.preventDefault();
 
     const note = {
-      text: title,
+      title: title,
       desc: desc,
     };
 
@@ -62,8 +62,15 @@ const CreateNote = () => {
     } else {
       setTitle('');
       setDesc('');
+      const updatedNotes = notes.map((note) => {
+        if (note._id === resp.data._id) {
+          return resp.data;
+        }
+
+        return note;
+      });
+      setNotes(updatedNotes);
       router.push('/notes');
-      setNotes(resp.data);
     }
   };
 
