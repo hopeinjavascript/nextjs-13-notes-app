@@ -36,6 +36,7 @@ const NotesContextProvider = ({ children }) => {
   const val = {
     loading,
     error,
+    setError,
     notes,
     setNotes,
   };
