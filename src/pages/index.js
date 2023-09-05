@@ -1,23 +1,18 @@
 import { Inter } from 'next/font/google';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from '@/styles/Notes.module.css';
+import { useRouter } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const session = useSession();
+  const router = useRouter();
 
-  const handleSignIn = async () => {
-    const resp = await signIn('credentials', {
-      redirect: false,
-      email: 'akshaysood@gmail.com', // hardcoded
-      password: '123', // hardcoded
-    });
-    // signIn('google', { callbackUrl: 'http://localhost:3000/notes' })
+  const handleSignUp = async () => router.push('/auth/signUp');
 
-    console.log(resp);
-  };
+  const handleSignIn = async () => router.push('/auth/signIn');
 
   const handleSignOut = () => signOut({ redirect: false });
 
@@ -30,6 +25,9 @@ export default function Home() {
           <Link href="/notes">
             <h1 className={styles.heading}>Notes App</h1>
           </Link>
+          <button className="btn_outline" onClick={handleSignUp}>
+            Register
+          </button>
           <button className="btn_outline" onClick={handleSignIn}>
             Login
           </button>
