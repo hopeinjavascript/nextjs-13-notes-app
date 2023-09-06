@@ -55,7 +55,7 @@ const Notes = () => {
       <header className={styles.notes_header}>
         <h1 className={styles.heading}>{'   '}Your notes</h1>
         <Link href="/notes/create">
-          <button className="btn_outline">Create note</button>
+          <button className="btn_primary">Create note</button>
         </Link>
       </header>
 

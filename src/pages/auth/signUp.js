@@ -57,7 +57,7 @@ const SignIn = () => {
             <p className={styles.form_label}>Password</p>
             <input type="password" placeholder="Enter password" />
           </div>
-          <button type="submit" className="btn_outline">
+          <button type="submit" className="btn_primary">
             Sign Up
           </button>
         </form>

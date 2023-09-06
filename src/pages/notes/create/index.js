@@ -109,7 +109,7 @@ const CreateNote = () => {
               onChange={(e) => setDesc(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn_outline">
+          <button type="submit" className="btn_primary">
             {noteId ? 'Edit' : 'Add'}
           </button>
         </form>

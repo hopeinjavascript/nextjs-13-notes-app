@@ -25,12 +25,14 @@ export default function Home() {
           <Link href="/notes">
             <h1 className={styles.heading}>Notes App</h1>
           </Link>
-          <button className="btn_outline" onClick={handleSignUp}>
-            Register
-          </button>
-          <button className="btn_outline" onClick={handleSignIn}>
-            Login
-          </button>
+          <div className="flex items-center gap-4 my-4">
+            <button className="btn_primary" onClick={handleSignUp}>
+              Register
+            </button>
+            <button className="btn_outline" onClick={handleSignIn}>
+              Login
+            </button>
+          </div>
         </>
       ) : (
         <>

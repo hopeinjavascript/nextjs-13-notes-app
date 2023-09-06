@@ -59,7 +59,7 @@ const SignIn = () => {
               defaultValue="akshaysood"
             />
           </div>
-          <button type="submit" className="btn_outline">
+          <button type="submit" className="btn_primary">
             Sign In
           </button>
         </form>
