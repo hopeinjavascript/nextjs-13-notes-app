@@ -3,9 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* light theme */
+  .light {
+    --bg: white;
+    --textColor: black;
+    --softBg: #f0f0f0;
+    --softTextColor: #626262;
+    /* OR */
+    --primary-color: #4681f4;
+    --secondary-color: #7c859c;
+    --font-color: #424242;
+    --bg-color: #f5f5f5;
+  }
+
+  .dark {
+    /* this class should only be used for setting variables
+      for setting css properties use .app-wrapper class instead
+    */
+    --bg: #0f172a;
+    --textColor: #ddd;
+    --softBg: #1f273a;
+    --softTextColor: #a6a6a6;
+    /* OR */
+    --primary-color: #9a97f3;
+    --secondary-color: #818cab;
+    --font-color: #e1e1ff;
+    --bg-color: #161625;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,18 +37,11 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --primary-color: #9a97f3;
+    --secondary-color: #818cab;
+    --font-color: #e1e1ff;
+    --bg-color: #161625;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)); */
-  background-color: whitesmoke;
 }
 
 * {
@@ -34,34 +51,36 @@ body {
   font-family: Calibri, sans-serif;
 }
 
+.app-wrapper {
+  padding: 2rem;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+}
+
 button,
 .btn {
   outline: 0;
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 5px;
-  /* color: #f5f5f5; */
   font-weight: bold;
 }
 
 .btn_primary {
-  background-color: steelblue;
+  background-color: var(--primary-color);
+  color: var(--softBg);
 }
 
 .btn_outline {
-  border: 2px solid #ccc;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
 }
 
 input[type='text'],
 input[type='email'],
-input[type='password'] {
-  padding: 0.5rem;
-  border-radius: 4px;
-  color: #252525;
-}
-
+input[type='password'],
 textarea {
   padding: 0.5rem;
   border-radius: 4px;
-  color: #252525;
+  background-color: var(--softBg);
 }

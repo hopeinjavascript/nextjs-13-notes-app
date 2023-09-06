@@ -1,6 +1,6 @@
 .notes_wrapper {
   width: 80%;
-  margin: 2rem auto;
+  margin: 0rem auto;
   min-height: 100vh;
   position: relative;
 }
@@ -24,7 +24,7 @@
 }
 
 .note {
-  border: 2px solid #ccc;
+  border: 1px solid var(--softTextColor);
   width: 220px;
   border-radius: 8px;
 }
@@ -47,7 +47,7 @@
 }
 
 .note_cta {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--softTextColor);
   padding: 0 1rem;
 }
 
