@@ -4,8 +4,8 @@ import styles from '@/styles/SingleNote.module.css';
 
 const Note = ({ note }) => {
   return (
-    <div className={styles.note} key={note.id}>
-      <h1 className={styles.text}>{note.text}</h1>
+    <div className={styles.note} key={note._id}>
+      <h1 className={styles.text}>{note.title}</h1>
       <p className={styles.desc}>{note.desc}</p>
     </div>
   );
