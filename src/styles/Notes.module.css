@@ -59,3 +59,23 @@
 .note_cta button:not(:last-child) {
   margin-right: 1rem;
 }
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 15px;
+  margin: 0.5rem 0;
+}
+
+.badge_new {
+  background-color: rgb(70, 130, 180, 0.1);
+  color: rgba(70, 130, 180);
+}
+.badge_progress {
+  background-color: rgb(240, 175, 79, 0.1);
+  color: rgb(240, 175, 79);
+}
+.badge_completed {
+  background-color: rgb(46, 139, 87, 0.1);
+  color: rgb(46, 139, 87);
+}

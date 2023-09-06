@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import useFetch from '@/utils/fetchApi';
 import { useNotesContext } from '@/context/notes';
 import styles from '@/styles/Notes.module.css';
@@ -6,13 +7,35 @@ import { useSession } from 'next-auth/react';
 
 const Notes = () => {
   // context
-  const { loading, error, setError, notes, setNotes } = useNotesContext();
+  const { loading, setLoading, error, setError, notes, setNotes } =
+    useNotesContext();
 
   const session = useSession();
   console.log(session);
 
   // custom hook
   const fetchApi = useFetch();
+
+  useEffect(() => {
+    async function fetchNotes() {
+      // setLoading(true); // initial value is set to true
+
+      const { error, resp, abortRequest } = await fetchApi('/api/notes');
+
+      if (error) {
+        console.error(resp);
+        setError(true);
+      } else {
+        setNotes(resp.data);
+      }
+    }
+
+    fetchNotes().finally(() => setLoading(false));
+
+    return () => {
+      //   abortRequest();
+    };
+  }, []);
 
   const deleteNote = async (noteId) => {
     const { error, resp } = await fetchApi(`/api/notes/${noteId}`, 'DELETE');
@@ -44,6 +67,13 @@ const Notes = () => {
         ) : (
           notes.map((note) => {
             const noteId = note._id;
+            const status =
+              note.status === 'new'
+                ? styles.badge_new
+                : note.status === 'progress'
+                ? styles.badge_progress
+                : styles.badge_completed;
+
             return (
               <div className={styles.note} key={noteId}>
                 <div className={styles.note_content}>
@@ -56,8 +86,15 @@ const Notes = () => {
                       ? `${note.desc.substring(0, 50)}...`
                       : note.desc}
                   </p>
-                  <p>status - {note.status}</p>
-                  <p>createdBy - {note.createdBy.name}</p>
+                  {/* <p className={`${styles.badge} ${status}`}>
+                    <strong>{note.status}</strong>
+                  </p> */}
+                  <p className={`flex justify-between items-center mt-3`}>
+                    <em> - {note.createdBy.name}</em>
+                    <strong className={`${styles.badge} ${status}`}>
+                      {note.status}
+                    </strong>
+                  </p>
                 </div>
                 {/* <hr /> */}
                 <div className={styles.note_cta}>
