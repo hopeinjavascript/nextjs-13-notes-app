@@ -20,10 +20,11 @@ const SignIn = () => {
       email,
       password,
       redirect: false,
-      callbackUrl: 'http://localhost:3000/notes',
+      callbackUrl: 'http://localhost:3000/notes', // why this doesn't work?
     });
 
-    if (resp.ok) router.push(resp.url);
+    // if (resp.ok) router.push(resp.url);
+    if (resp.ok) router.push('http://localhost:3000/notes');
   };
 
   return (
