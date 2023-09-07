@@ -2,15 +2,20 @@ import NotesContextProvider from '@/context/notes';
 import ThemeContextProvider from '@/context/theme';
 import '@/styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
+import Nav from '@/components/Nav';
+import '../styles/nav.css';
 
 export default function App({ Component, pageProps }) {
   return (
-    <ThemeContextProvider>
-      <SessionProvider session={pageProps.session}>
-        <NotesContextProvider>
-          <Component {...pageProps} />
-        </NotesContextProvider>
-      </SessionProvider>
-    </ThemeContextProvider>
+    <>
+      <ThemeContextProvider>
+        <SessionProvider session={pageProps.session}>
+          <Nav />
+          <NotesContextProvider>
+            <Component {...pageProps} />
+          </NotesContextProvider>
+        </SessionProvider>
+      </ThemeContextProvider>
+    </>
   );
 }
