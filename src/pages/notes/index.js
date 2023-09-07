@@ -51,7 +51,6 @@ const Notes = () => {
 
   return (
     <div className={styles.notes_wrapper}>
-      <Link href="/">Home</Link>
       <header className={styles.notes_header}>
         <h1 className={styles.heading}>{'   '}Your notes</h1>
         <Link href="/notes/create">
@@ -78,12 +77,16 @@ const Notes = () => {
               <div className={styles.note} key={noteId}>
                 <div className={styles.note_content}>
                   <Link href={`/notes/${noteId}`}>
-                    <h1 className={styles.text}>{note.title}</h1>
+                    <h1 className={styles.text}>
+                      {note.title.length > 10
+                        ? `${note.title.substring(0, 10)}...`
+                        : note.title}
+                    </h1>
                   </Link>
 
                   <p className={styles.desc}>
                     {note.desc.length > 50
-                      ? `${note.desc.substring(0, 50)}...`
+                      ? `${note.desc.substring(0, 45)}...`
                       : note.desc}
                   </p>
                   {/* <p className={`${styles.badge} ${status}`}>
