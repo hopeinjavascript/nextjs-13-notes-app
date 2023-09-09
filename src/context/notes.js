@@ -4,7 +4,7 @@ const NotesContext = createContext(null); // null || []
 
 const NotesContextProvider = ({ children }) => {
   // read
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [notes, setNotes] = useState([]);
 
