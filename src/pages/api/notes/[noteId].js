@@ -1,7 +1,14 @@
 import NoteModel from '@/models/note';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
 
 // req, res, next are standard node js's objects
 export default async function handler(req, res, next) {
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session)
+    return res.json({ msg: 'you are not authenticated', status: 401 });
+
   const apiHandlers = {
     DELETE: async () => {
       const { noteId } = req.query;
@@ -9,7 +16,7 @@ export default async function handler(req, res, next) {
       if (!noteId)
         return res
           .status(200)
-          .json({ message: 'Note id is required', status: 400 });
+          .json({ msg: 'Note id is required', status: 400 });
 
       const deletedNote = await NoteModel.findByIdAndDelete({ _id: noteId });
 
@@ -18,7 +25,7 @@ export default async function handler(req, res, next) {
 
       res
         .status(200)
-        .json({ message: 'Deleted Note', status: 200, data: deletedNote });
+        .json({ msg: 'Deleted Note', status: 200, data: deletedNote });
     },
     PATCH: async () => {
       const { noteId } = req.query;
@@ -26,7 +33,7 @@ export default async function handler(req, res, next) {
       if (!noteId)
         return res
           .status(200)
-          .json({ message: 'Note id is required', status: 400 });
+          .json({ msg: 'Note id is required', status: 400 });
 
       let editedNote = await NoteModel.findByIdAndUpdate(
         { _id: noteId },
@@ -44,7 +51,7 @@ export default async function handler(req, res, next) {
 
       res
         .status(200)
-        .json({ message: 'Edited Note', status: 200, data: editedNote });
+        .json({ msg: 'Edited Note', status: 200, data: editedNote });
     },
   };
 

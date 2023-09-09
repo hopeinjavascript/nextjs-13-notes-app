@@ -17,6 +17,10 @@ export default async function handler(req, res, next) {
 
   // TODO: change session.expires value, currently it is one month
   const session = await getServerSession(req, res, authOptions);
+
+  if (!session)
+    return res.json({ msg: 'you are not authenticated', status: 401 });
+
   const apiHandlers = {
     GET: async () => {
       await connectToDB();
@@ -25,7 +29,7 @@ export default async function handler(req, res, next) {
       }).populate('createdBy', 'name username email');
 
       res.status(200).json({
-        message: 'Notes',
+        msg: 'Notes',
         status: 200,
         data: notes,
       });
