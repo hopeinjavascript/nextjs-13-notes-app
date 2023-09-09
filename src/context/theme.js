@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -18,13 +19,16 @@ const ThemeContextProvider = ({ children }) => {
     return () => {};
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const updatedTheme = theme === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', updatedTheme);
     setTheme(updatedTheme);
-  };
+  }, [theme]);
 
-  const val = useMemo(() => ({ theme, setTheme, toggleTheme }), [theme]);
+  const val = useMemo(
+    () => ({ theme, setTheme, toggleTheme }),
+    [theme, toggleTheme]
+  );
 
   return (
     <ThemeContext.Provider value={val}>
