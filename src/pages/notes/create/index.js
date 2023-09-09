@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
 import useFetch from '@/utils/fetchApi';
 import { useNotesContext } from '@/context/notes';
 import { useRouter } from 'next/router'; // OR next/navigation
+import { getSession, useSession } from 'next-auth/react';
 
 // Used as edit note component as well
 const CreateNote = () => {
@@ -13,6 +14,19 @@ const CreateNote = () => {
   const router = useRouter();
   const noteId = router.query._id;
   const note = router.query;
+
+  // const session = useSession();
+  // console.log(session);
+
+  // refer pt (1.)
+  // * this doesn't work on the client side because session is evaluated when page is loaded
+  // * it is initially in the loading state and then it is evaluated to be authenticated/unauthenticated
+  // useEffect(() => {
+  //   console.log('session');
+  //   if (!session.data || session.status === 'unauthenticated') {
+  //     router.push('/auth/signIn');
+  //   }
+  // }, []);
 
   // create
   const [title, setTitle] = useState(note?.title ?? ''); // null || ''
@@ -85,7 +99,9 @@ const CreateNote = () => {
         />
       </div> */}
       <div className={styles.right}>
-        <h1 className="text-4xl mb-5">Create Note</h1>
+        <h1 className="text-4xl mb-5">
+          {noteId ? 'Edit Note' : 'Create Note'}
+        </h1>
         <form
           onSubmit={noteId ? editNote : addNote}
           className={styles.notes_form}
@@ -117,5 +133,26 @@ const CreateNote = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: `${process.env.NEXTAUTH_URL}/auth/signIn`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      // (1.)
+      // when we send this, it is received in the client side as an evaluated session (whether authenticated/unauthenticated) via SessionProvider. useSession first checks for session passed by SessionProvider and hence, it is always in the "authenticated/unauthenticated" mode, there is no "loading" status.
+      session,
+    },
+  };
+}
 
 export default CreateNote;

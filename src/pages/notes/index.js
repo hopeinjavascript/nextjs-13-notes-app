@@ -1,41 +1,35 @@
 import { useEffect } from 'react';
-import useFetch from '@/utils/fetchApi';
 import { useNotesContext } from '@/context/notes';
 import styles from '@/styles/Notes.module.css';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
+import useFetch, { fetchNotes } from '@/utils/fetchApi';
+import { useRouter } from 'next/router';
 
-const Notes = () => {
+const Notes = ({ notes }) => {
+  const router = useRouter();
+  // Call this function whenever you want to
+  // refresh props!
+  // https://www.joshwcomeau.com/nextjs/refreshing-server-side-props/
+  const refreshData = () => {
+    router.replace(router.asPath); // * WORK AROUND?
+  };
   // context
-  const { loading, setLoading, error, setError, notes, setNotes } =
-    useNotesContext();
+  const { loading, error, setError, setNotes, setLoading } = useNotesContext();
 
-  const session = useSession();
-  console.log(session);
-
-  // custom hook
   const fetchApi = useFetch();
 
   useEffect(() => {
-    async function fetchNotes() {
-      // setLoading(true); // initial value is set to true
+    setNotes(notes);
+  }, [notes, setNotes]);
 
-      const { error, resp, abortRequest } = await fetchApi('/api/notes');
-
-      if (error) {
-        console.error(resp);
-        setError(true);
-      } else {
-        setNotes(resp.data);
-      }
-    }
-
-    fetchNotes().finally(() => setLoading(false));
-
-    return () => {
-      //   abortRequest();
-    };
-  }, []);
+  // * Not needed refer pt (1.)
+  // wrapping it in useEffect for ERROR: cannot update a component while rendering a different component
+  // useEffect(() => {
+  //   if (notes?.length) {
+  //     setLoading(false);
+  //   }
+  // }, [notes]);
 
   const deleteNote = async (noteId) => {
     const { error, resp } = await fetchApi(`/api/notes/${noteId}`, 'DELETE');
@@ -46,6 +40,7 @@ const Notes = () => {
     } else {
       const updatedNotes = notes.filter((note) => note._id !== resp.data._id);
       setNotes(updatedNotes);
+      refreshData();
     }
   };
 
@@ -59,8 +54,13 @@ const Notes = () => {
       </header>
 
       <div className={styles.notes_container}>
-        {loading && <h1>Loading...</h1>}
-        {error && <h1>Error in fetching your notes...</h1>}
+        {/*  (1.)
+            below two condition are not needed as data is fetch and pre-rendered server side
+            if there is any error  then it will be on the server
+            // * we can think of putting loading state ?
+        */}
+        {/* {loading && <h1>Loading...</h1>}
+        {error && <h1>Error in fetching your notes...</h1>} */}
         {!notes.length ? (
           <h1>There are no notes available</h1>
         ) : (
@@ -76,7 +76,13 @@ const Notes = () => {
             return (
               <div className={styles.note} key={noteId}>
                 <div className={styles.note_content}>
-                  <Link href={`/notes/${noteId}`}>
+                  <Link
+                    href={{
+                      pathname: `/notes/${noteId}`,
+                      query: noteId,
+                    }}
+                    as={`/notes/${noteId}`}
+                  >
                     <h1 className={styles.text}>
                       {note.title.length > 10
                         ? `${note.title.substring(0, 10)}...`
@@ -121,5 +127,28 @@ const Notes = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: `${process.env.NEXTAUTH_URL}/auth/signIn`,
+        permanent: false,
+      },
+    };
+  }
+
+  // https://stackoverflow.com/questions/76298869/nextauth-js-getserversession-return-null-even-after-user-is-sign-in
+  const notes = await fetchNotes(context);
+
+  return {
+    props: {
+      // session,
+      notes: notes.data,
+    },
+  };
+}
 
 export default Notes;

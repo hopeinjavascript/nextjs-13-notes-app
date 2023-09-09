@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from '@/styles/Notes.module.css';
 
@@ -30,4 +30,15 @@ export default function Home() {
       )}
     </main>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      name: 'akshay', // just!
+      session, // * returning session is important
+    },
+  };
 }

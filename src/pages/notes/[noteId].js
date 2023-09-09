@@ -1,6 +1,18 @@
-import React from 'react';
-import { notes } from '@/../data/notes';
 import styles from '@/styles/SingleNote.module.css';
+import { fetchNoteById } from '@/utils/fetchApi';
+import { getSession } from 'next-auth/react';
+
+/*
+Note: Here we are using the data sent from master list page
+
+> There are three possible approaches
+    1. sent data from master list page
+      - [ get the query param using useRouter ] -> this will not work if you refresh the page,
+    2. make an api call client side using useEffect (recommended over 1st approach if data is going to be large)  
+      - [ get the query param using useRouter and make a fetch call ]
+    3. use getServerSideProps to grab the dynamic route query param (recommended over 2nd approach if data is going to be large and if you want to take the advantage of pre-rendering) 
+      - [ get query param in context arg and make a fetch call]
+*/
 
 const Note = ({ note }) => {
   return (
@@ -11,49 +23,26 @@ const Note = ({ note }) => {
   );
 };
 
-export async function getStaticPaths() {
-  /**
-   * Server Error
-    Error: A required parameter (noteId) was not provided as a string received number in getStaticPaths for /notes/[noteId]
-    This error happened while generating the page. Any console logs will be displayed in the terminal window.
-  **/
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const noteId = context.query.noteId;
 
-  // noteId refers to the file name
-  return {
-    paths: [
-      { params: { noteId: '1' } }, // values should be string
-      { params: { noteId: '2' } },
-      { params: { noteId: '3' } },
-      { params: { noteId: '4' } },
-    ],
-    fallback: false,
-  };
-}
+  if (!session) {
+    return {
+      redirect: {
+        destination: `${process.env.NEXTAUTH_URL}/auth/signIn`,
+        permanent: false,
+      },
+    };
+  }
 
-export async function getStaticProps(context) {
-  const {
-    params: { noteId },
-  } = context;
-
-  /*
-  DO THIS when you already have data available
-  */
-  const note = notes.find((note) => note.id === parseInt(noteId));
-
-  //destructing because it is giving error of serialization on date object
-  const { id, text, desc, status, createdBy } = note;
-
-  /*
-  DO NOT DO THIS
-  we should not call our own API routes for pre-rendering content as it might cause unnecessary roundtrip/delay, this can save you approx 100ms
-  The fact is that it is advised/recommended not to call our own API routes from getStaticProps or getServerSideProps
-  you may call any external API routes
-  */
-  // const res = await fetch(`/api/notes/${noteId}`);
-  // const note = await res.json();
+  const note = await fetchNoteById(context, noteId);
 
   return {
-    props: { note: { id, text, desc, status, createdBy } },
+    props: {
+      // session,
+      note: note.data,
+    },
   };
 }
 
