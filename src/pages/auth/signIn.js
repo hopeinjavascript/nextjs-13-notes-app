@@ -20,11 +20,11 @@ const SignIn = () => {
       email,
       password,
       redirect: false,
-      callbackUrl: 'http://localhost:3000/notes', // why this doesn't work?
+      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/notes`, // why this doesn't work? it returns http://localhost:3000
     });
 
     // if (resp.ok) router.push(resp.url);
-    if (resp.ok) router.push('http://localhost:3000/notes');
+    if (resp.ok) router.push(`${process.env.NEXT_PUBLIC_URL}/notes`);
   };
 
   return (
