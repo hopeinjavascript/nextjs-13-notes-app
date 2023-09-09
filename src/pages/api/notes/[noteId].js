@@ -10,6 +10,24 @@ export default async function handler(req, res, next) {
     return res.json({ msg: 'you are not authenticated', status: 401 });
 
   const apiHandlers = {
+    GET: async () => {
+      const { noteId } = req.query;
+
+      if (!noteId)
+        return res
+          .status(200)
+          .json({ msg: 'Note id is required', status: 400 });
+
+      const note = await NoteModel.findById({ _id: noteId });
+
+      if (!note)
+        return res.json({
+          msg: 'No note found with provided id ' + noteId,
+          status: 500,
+        });
+
+      res.status(200).json({ msg: 'Note', status: 200, data: note });
+    },
     DELETE: async () => {
       const { noteId } = req.query;
 
