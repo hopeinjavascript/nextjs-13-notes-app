@@ -1,27 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const SignIn = () => {
   const refForm = React.useRef(null);
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+
     const name = refForm.current[0].value;
     const email = refForm.current[1].value;
     const password = refForm.current[2].value;
 
-    if (!name || !email || !password) return alert('Fill in all the fields');
+    if (!name || !email || !password) {
+      setLoading(false);
+      return alert('Fill in all the fields');
+    }
 
-    const res = await fetch('/api/auth/signUp', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-    const data = await res.json();
-    router.push('/auth/signIn');
+    try {
+      const res = await fetch('/api/auth/signUp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+
+      if (data.msg === 'User/Email already exists') {
+        return refForm.current.reset(); // OR return e.target.reset();
+      }
+
+      router.push('/auth/signIn');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,8 +78,8 @@ const SignIn = () => {
             <p className={styles.form_label}>Password</p>
             <input type="password" placeholder="Enter password" />
           </div>
-          <button type="submit" className="btn_primary">
-            Sign Up
+          <button type="submit" className="btn_primary" disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
       </div>

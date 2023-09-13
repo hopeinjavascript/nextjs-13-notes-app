@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
@@ -8,23 +8,37 @@ const SignIn = () => {
   const refForm = React.useRef(null);
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     const email = refForm.current[0].value;
     const password = refForm.current[1].value;
 
-    if (!email || !password) return alert('Fill in all the fields');
+    if (!email || !password) {
+      setLoading(false);
+      return alert('Fill in all the fields');
+    }
 
-    const resp = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-      callbackUrl: `${process.env.NEXT_PUBLIC_URL}/notes`, // why this doesn't work? it returns http://localhost:3000
-    });
+    try {
+      const resp = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: `${process.env.NEXT_PUBLIC_URL}/notes`, // why this doesn't work? it returns http://localhost:3000
+      });
 
-    // if (resp.ok) router.push(resp.url);
-    if (resp.ok) router.push(`${process.env.NEXT_PUBLIC_URL}/notes`);
+      // if (resp.ok) router.push(resp.url);
+      if (resp.ok) router.push(`${process.env.NEXT_PUBLIC_URL}/notes`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+      refForm.current.reset(); // OR return e.target.reset();
+    }
   };
 
   return (
@@ -60,8 +74,8 @@ const SignIn = () => {
               defaultValue="akshaysood"
             />
           </div>
-          <button type="submit" className="btn_primary">
-            Sign In
+          <button type="submit" className="btn_primary" disabled={loading}>
+            {loading ? 'Authenticating...' : 'Authenticate'}
           </button>
         </form>
       </div>

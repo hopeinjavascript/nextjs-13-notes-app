@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
 import useFetch from '@/utils/fetchApi';
 import { useNotesContext } from '@/context/notes';
@@ -9,6 +9,8 @@ import { getSession, useSession } from 'next-auth/react';
 const CreateNote = () => {
   // context
   const { notes, setNotes, setError } = useNotesContext();
+
+  const [loading, setLoading] = useState(false);
 
   // for routing programmatically
   const router = useRouter();
@@ -37,6 +39,9 @@ const CreateNote = () => {
 
   const addNote = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
+
     const note = {
       title: title,
       desc: desc,
@@ -56,10 +61,14 @@ const CreateNote = () => {
       router.push('/notes');
       setNotes((prevNotes) => [...prevNotes, resp.data]);
     }
+
+    setLoading(false);
   };
 
   const editNote = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     const note = {
       title: title,
@@ -86,6 +95,8 @@ const CreateNote = () => {
       setNotes(updatedNotes);
       router.push('/notes');
     }
+
+    setLoading(false);
   };
 
   return (
@@ -125,9 +136,15 @@ const CreateNote = () => {
               onChange={(e) => setDesc(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn_primary">
-            {noteId ? 'Edit' : 'Add'}
-          </button>
+          {loading ? (
+            <button type="submit" className="btn_primary" disabled={loading}>
+              {noteId ? 'Editing...' : 'Adding...'}
+            </button>
+          ) : (
+            <button type="submit" className="btn_primary" disabled={loading}>
+              {noteId ? 'Edit' : 'Add'}
+            </button>
+          )}
         </form>
       </div>
     </div>
