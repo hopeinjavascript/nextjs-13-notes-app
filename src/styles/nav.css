@@ -28,6 +28,20 @@ nav,
   align-items: center;
 }
 
+.filter-checkbox-label {
+  width: auto;
+  padding: 0.5rem;
+}
+
+.filter-checkbox-label:hover,
+.filter-checkbox-label:focus,
+.checkbox:checked + .filter-checkbox-label {
+  background-color: var(--softTextColor);
+  color: var(--softBg);
+  outline: 1px solid var(--softTextColor);
+  font-weight: bold;
+}
+
 .fa-moon {
   /* color: #f1c40f; */
   color: #f39c12;

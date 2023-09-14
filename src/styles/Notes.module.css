@@ -16,6 +16,29 @@
   font-size: 3rem;
 }
 
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  cursor: pointer;
+}
+
+.clear_filter {
+  position: relative;
+  color: rgb(253, 106, 106);
+}
+
+.clear_filter:after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  background-color: rgb(253, 106, 106, 0.2);
+  margin-left: 0.75rem;
+  border-radius: 50px;
+}
+
 .notes_container {
   display: flex;
   justify-content: space-between;

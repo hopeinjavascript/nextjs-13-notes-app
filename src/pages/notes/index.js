@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNotesContext } from '@/context/notes';
 import styles from '@/styles/Notes.module.css';
 import Link from 'next/link';
@@ -17,10 +17,15 @@ const Notes = ({ notes }) => {
   // context
   const { loading, error, setError, setNotes, setLoading } = useNotesContext();
 
+  const [uniqueStatuses, setUniqueStatuses] = useState([]);
+  const [filteredNotes, setFilteredNotes] = useState(notes);
+  const [checkedValues, setCheckedValues] = useState([]);
+
   const fetchApi = useFetch();
 
   useEffect(() => {
     setNotes(notes);
+    setUniqueStatuses([...new Set(notes.map((note) => note.status))]);
   }, [notes, setNotes]);
 
   // * Not needed refer pt (1.)
@@ -39,15 +44,78 @@ const Notes = ({ notes }) => {
       setError(true);
     } else {
       const updatedNotes = notes.filter((note) => note._id !== resp.data._id);
-      setNotes(updatedNotes);
+      setNotes(updatedNotes); // context
+      setFilteredNotes(updatedNotes); // local state
       refreshData();
     }
+  };
+
+  // * client side filtering
+  const handleFilter = (e) => {
+    const value = e.target.value,
+      checked = e.target.checked;
+
+    if (checked) {
+      checkedValues.push({ checked, value });
+    } else {
+      // we are not changing the checked property to false here
+      // we are directly removing the obj from the array
+      const index = checkedValues.findIndex(
+        (checkedObj) => checkedObj.value === value
+      );
+      checkedValues.splice(index, 1);
+    }
+
+    let updatedNotes = [];
+    if (checkedValues.length > 0) {
+      updatedNotes = notes.filter((note) =>
+        // checkedValues.find(
+        //   (checkedObj) => checkedObj.value === note.status && note
+        // )
+        checkedValues.some((checkedObj) => checkedObj.value === note.status)
+      );
+    } else {
+      updatedNotes = notes;
+    }
+    setFilteredNotes(updatedNotes);
+  };
+
+  const clearFilter = () => {
+    setFilteredNotes(notes);
+    setCheckedValues([]);
   };
 
   return (
     <div className={styles.notes_wrapper}>
       <header className={styles.notes_header}>
-        <h1 className={styles.heading}>{'   '}Your notes</h1>
+        {/* <h1 className={styles.heading}>{'   '}Your notes</h1> */}
+        <div className={styles.filter}>
+          <span className={styles.clear_filter} onClick={clearFilter}>
+            Clear
+          </span>
+          {uniqueStatuses.map((note) => (
+            <div key={note}>
+              <input
+                className="checkbox"
+                type="checkbox"
+                onChange={handleFilter}
+                value={note}
+                id={note}
+                // maintaining checked state for clearing filter
+                checked={checkedValues.some(
+                  (checkedObj) => checkedObj.value === note
+                )}
+              />
+              <label
+                htmlFor={note}
+                key={note}
+                className={`checkbox-label filter-checkbox-label`}
+              >
+                {note}
+              </label>
+            </div>
+          ))}
+        </div>
         <Link href="/notes/create">
           <button className="btn_primary">Create note</button>
         </Link>
@@ -61,10 +129,10 @@ const Notes = ({ notes }) => {
         */}
         {/* {loading && <h1>Loading...</h1>}
         {error && <h1>Error in fetching your notes...</h1>} */}
-        {!notes.length ? (
+        {!filteredNotes.length ? (
           <h1>There are no notes available</h1>
         ) : (
-          notes.map((note) => {
+          filteredNotes.map((note) => {
             const noteId = note._id;
             const status =
               note.status === 'new'
