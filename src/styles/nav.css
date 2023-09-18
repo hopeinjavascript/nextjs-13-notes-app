@@ -1,11 +1,23 @@
 nav,
 .nav {
-  /* position: sticky;
-  top: 0; */
-  width: 80%;
-  margin: 0 auto 2rem auto;
+  position: sticky;
+  top: 0;
+  /* width: 100%; */
+  margin: 0 auto 0rem auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: var(--nav-height);
+  padding: 0 var(--nav-height);
+  z-index: 1;
+  background-color: var(--softBg);
+  /* box-shadow: 0 0px 2px var(--softTextColor); */
+}
+
+.logo {
+  color: var(--font-color);
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -70,16 +82,26 @@ nav,
 .btn_signIn_nav,
 .btn_logout_nav {
   padding: 0.25rem 0.5rem;
-  padding: 0;
+  margin-right: 1rem;
   color: #f0f0f0;
+  border-radius: 20px;
 }
 
 .btn_signUp_nav {
-  color: var(--primary-color);
+  color: var(--softBg);
+  background-color: var(--primary-color);
 }
 .btn_signIn_nav {
-  color: var(--secondary-color);
+  color: var(--primary-color);
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+.btn_signIn_nav:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
 }
 .btn_logout_nav {
   color: rgb(253, 106, 106);
+  background-color: rgb(253, 106, 106, 0.1);
+}
+.btn_logout_nav:hover {
+  background-color: rgb(253, 106, 106, 0.2);
 }
