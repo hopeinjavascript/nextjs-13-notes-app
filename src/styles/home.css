@@ -1,0 +1,37 @@
+.left,
+.right {
+  width: 50%;
+  display: flex;
+}
+
+.left {
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.secondary-headline {
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+.hero-headline {
+  line-height: initial;
+  font-weight: bold;
+}
+
+.hero-headline a {
+  text-decoration: underline;
+}
+
+.hero-left * {
+  margin-bottom: 2rem;
+}
+
+.btn-hero {
+  font-size: 1.25rem;
+  margin: 1rem 0 0 0;
+}

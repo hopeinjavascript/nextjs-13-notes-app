@@ -1,8 +1,9 @@
 .notes_wrapper {
   width: 80%;
   margin: 0rem auto;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--nav-height));
   position: relative;
+  padding: 2rem 0;
 }
 
 .notes_header {

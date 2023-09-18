@@ -41,7 +41,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className={styles.notes_form_wrapper}>
+    <div className={styles.form_wrapper}>
       {/* <div className={styles.left}>
         <Image
           src="http://unsplash.it/450"
@@ -73,7 +73,7 @@ const SignIn = () => {
               defaultValue="akshaysood"
             />
           </div>
-          <button type="submit" className="btn_primary" disabled={loading}>
+          <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Authenticating...' : 'Authenticate'}
           </button>
         </form>

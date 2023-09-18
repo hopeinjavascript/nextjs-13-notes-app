@@ -4,13 +4,19 @@
 
 :root {
   /* light theme */
+
+  --nav-height: 12vh;
+  --primary-color: #4681f4;
+  --primary-color-rgb: 70, 129, 244;
+
   .light {
     --bg: white;
     --textColor: black;
     --softBg: #f0f0f0;
     --softTextColor: #626262;
     /* OR */
-    --primary-color: #4681f4;
+    /* --primary-color: #4681f4; */
+    /* --primary-color-rgb: 70, 129, 244; */
     --secondary-color: #7c859c;
     --font-color: #424242;
     --bg-color: #f5f5f5;
@@ -22,10 +28,12 @@
     */
     --bg: #0f172a;
     --textColor: #ddd;
-    --softBg: #1f273a;
+    /* --softBg: #1f273a; */
+    --softBg: #19192b;
     --softTextColor: #a6a6a6;
     /* OR */
-    --primary-color: #9a97f3;
+    /* --primary-color: #9a97f3; */
+    /* --primary-color-rgb: 154, 151, 243; */
     --secondary-color: #818cab;
     --font-color: #e1e1ff;
     --bg-color: #161625;
@@ -52,9 +60,40 @@
 }
 
 .app-wrapper {
-  padding: 2rem;
   background-color: var(--bg-color);
   color: var(--font-color);
+  height: auto;
+  min-height: 100vh;
+  position: relative;
+}
+
+h1 {
+  font-size: 4rem;
+}
+h2 {
+  font-size: 3.5rem;
+}
+h3 {
+  font-size: 3rem;
+}
+h4 {
+  font-size: 2.5rem;
+}
+h5 {
+  font-size: 2rem;
+}
+h6 {
+  font-size: 1.5rem;
+}
+
+.page-section {
+  height: auto;
+  min-height: calc(100vh - var(--nav-height));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 80%;
+  margin: 0 auto;
 }
 
 button,
@@ -71,12 +110,12 @@ button:disabled {
   opacity: 0.8;
 }
 
-.btn_primary {
+.btn-primary {
   background-color: var(--primary-color);
   color: var(--softBg);
 }
 
-.btn_outline {
+.btn-outline {
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
 }

@@ -100,7 +100,7 @@ const CreateNote = () => {
   };
 
   return (
-    <div className={styles.notes_form_wrapper}>
+    <div className={styles.form_wrapper}>
       {/* <div className={styles.left}>
         <Image
           src="http://unsplash.it/450"
@@ -137,11 +137,11 @@ const CreateNote = () => {
             />
           </div>
           {loading ? (
-            <button type="submit" className="btn_primary" disabled={loading}>
+            <button type="submit" className="btn-primary" disabled={loading}>
               {noteId ? 'Editing...' : 'Adding...'}
             </button>
           ) : (
-            <button type="submit" className="btn_primary" disabled={loading}>
+            <button type="submit" className="btn-primary" disabled={loading}>
               {noteId ? 'Edit' : 'Add'}
             </button>
           )}

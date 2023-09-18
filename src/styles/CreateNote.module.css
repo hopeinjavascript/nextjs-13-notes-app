@@ -1,21 +1,14 @@
-.notes_form_wrapper {
+.form_wrapper {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--nav-height));
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.left {
-  width: 400px;
-  height: 400px;
-  /* padding: 1rem; */
-}
-
+.left,
 .right {
   width: 400px;
-  height: 400px;
-  padding: 1rem;
 }
 
 .form_label {

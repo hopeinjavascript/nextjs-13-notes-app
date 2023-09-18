@@ -117,7 +117,7 @@ const Notes = ({ notes }) => {
           ))}
         </div>
         <Link href="/notes/create">
-          <button className="btn_primary">Create note</button>
+          <button className="btn-primary">Create note</button>
         </Link>
       </header>
 

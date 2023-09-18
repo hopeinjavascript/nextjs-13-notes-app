@@ -46,7 +46,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className={styles.notes_form_wrapper}>
+    <div className={styles.form_wrapper}>
       {/* <div className={styles.left}>
         <Image
           src="http://unsplash.it/450"
@@ -78,7 +78,7 @@ const SignUp = () => {
             <p className={styles.form_label}>Password</p>
             <input type="password" placeholder="Enter password" />
           </div>
-          <button type="submit" className="btn_primary" disabled={loading}>
+          <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>

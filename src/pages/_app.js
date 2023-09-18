@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 import { SessionProvider } from 'next-auth/react';
 import Nav from '@/components/Nav';
 import '../styles/nav.css';
+import '../styles/home.css';
 
 export default function App({ Component, pageProps }) {
   return (
