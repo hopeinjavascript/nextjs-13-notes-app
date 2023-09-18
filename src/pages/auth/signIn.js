@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
-import Image from 'next/image';
-import { signIn } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 const SignIn = () => {
@@ -82,5 +81,28 @@ const SignIn = () => {
     </div>
   );
 };
+
+// to prevent from navigating to sign in page if user is already logged in
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  console.log(session);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: `${process.env.NEXTAUTH_URL}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      // (1.)
+      // when we send this, it is received in the client side as an evaluated session (whether authenticated/unauthenticated) via SessionProvider. useSession first checks for session passed by SessionProvider and hence, it is always in the "authenticated/unauthenticated" mode, there is no "loading" status.
+      session,
+    },
+  };
+}
 
 export default SignIn;
