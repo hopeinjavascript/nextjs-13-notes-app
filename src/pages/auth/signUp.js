@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
+import { FiUserPlus } from 'react-icons/fi';
+import IconButton from '@/components/IconButton';
 
 const SignUp = () => {
   const refForm = React.useRef(null);
@@ -78,9 +80,21 @@ const SignUp = () => {
             <p className={styles.form_label}>Password</p>
             <input type="password" placeholder="Enter password" />
           </div>
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
-          </button>
+          {loading ? (
+            <IconButton
+              btnText="Registering..."
+              btnIcon={<Loader />}
+              btnType="primary"
+              isLoading={loading}
+            />
+          ) : (
+            <IconButton
+              btnText="Register"
+              btnIcon={<FiUserPlus />}
+              btnType="primary"
+              isLoading={loading}
+            />
+          )}
         </form>
       </div>
     </div>

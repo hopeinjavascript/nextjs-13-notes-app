@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google';
 import { getSession, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { HiArrowRight } from 'react-icons/hi';
+import IconButton from '@/components/IconButton';
 
 // https://storyset.com/ => for illustrations
 
@@ -20,9 +22,10 @@ export default function Home() {
   return (
     <main className="page-section">
       <div className="left hero-left">
-        <h2 className="headline hero-headline">
-          Single place for all your <Link href="/notes">notes</Link>
-        </h2>
+        <h1 className="headline hero-headline">
+          Single place for all
+          <br /> your <Link href="/notes">notes</Link>
+        </h1>
         <p className="secondary-headline">
           Maintaining notes helps one to keep things to do in place. You don't
           have to remember and keep counting on things that are important, just
@@ -30,12 +33,17 @@ export default function Home() {
           maintain one!
         </p>
         <Link href={btnLink}>
-          <button className="btn-primary btn-hero">{btnText}</button>
+          <IconButton
+            btnText={btnText}
+            btnIcon={<HiArrowRight />}
+            btnType="primary"
+            className="btn-hero"
+          />
         </Link>
       </div>
       <div className="right">
         <Image
-          src="/notes-pana.png"
+          src="/notes-pana.svg"
           // src="/hero-img-removebg.png"
           width={500}
           height={500}

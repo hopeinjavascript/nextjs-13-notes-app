@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import styles from '@/styles/CreateNote.module.css';
 import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { FiLock } from 'react-icons/fi';
+import IconButton from '@/components/IconButton';
+import Loader from '@/components/Loader';
 
 const SignIn = () => {
   const refForm = React.useRef(null);
@@ -73,9 +76,22 @@ const SignIn = () => {
               defaultValue="akshaysood"
             />
           </div>
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? 'Authenticating...' : 'Authenticate'}
-          </button>
+
+          {loading ? (
+            <IconButton
+              btnText="Authenticating..."
+              btnIcon={<Loader />}
+              btnType="primary"
+              isLoading={loading}
+            />
+          ) : (
+            <IconButton
+              btnText="Authenticate"
+              btnIcon={<FiLock />}
+              btnType="primary"
+              isLoading={loading}
+            />
+          )}
         </form>
       </div>
     </div>

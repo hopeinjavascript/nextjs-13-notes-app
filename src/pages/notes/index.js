@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { getSession } from 'next-auth/react';
 import useFetch, { fetchNotes } from '@/utils/fetchApi';
 import { useRouter } from 'next/router';
+import { BiAddToQueue } from 'react-icons/bi';
+import IconButton from '@/components/IconButton';
 
 const Notes = ({ notes }) => {
   const router = useRouter();
@@ -117,7 +119,12 @@ const Notes = ({ notes }) => {
           ))}
         </div>
         <Link href="/notes/create">
-          <button className="btn-primary">Create note</button>
+          <IconButton
+            btnText="Create Note"
+            btnIcon={<BiAddToQueue />}
+            btnType="primary"
+            isLoading={loading}
+          />
         </Link>
       </header>
 

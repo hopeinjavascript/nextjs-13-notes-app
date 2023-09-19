@@ -4,6 +4,9 @@ import useFetch from '@/utils/fetchApi';
 import { useNotesContext } from '@/context/notes';
 import { useRouter } from 'next/router'; // OR next/navigation
 import { getSession, useSession } from 'next-auth/react';
+import { HiPlus } from 'react-icons/hi';
+import { AiOutlineEdit } from 'react-icons/ai';
+import IconButton from '@/components/IconButton';
 
 // Used as edit note component as well
 const CreateNote = () => {
@@ -137,13 +140,35 @@ const CreateNote = () => {
             />
           </div>
           {loading ? (
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {noteId ? 'Editing...' : 'Adding...'}
-            </button>
+            noteId ? (
+              <IconButton
+                btnText="Editing"
+                btnIcon={<Loader />}
+                btnType="primary"
+                isLoading={loading}
+              />
+            ) : (
+              <IconButton
+                btnText="Adding"
+                btnIcon={<Loader />}
+                btnType="primary"
+                isLoading={loading}
+              />
+            )
+          ) : noteId ? (
+            <IconButton
+              btnText="Edit"
+              btnIcon={<AiOutlineEdit />}
+              btnType="primary"
+              isLoading={loading}
+            />
           ) : (
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {noteId ? 'Edit' : 'Add'}
-            </button>
+            <IconButton
+              btnText="Add"
+              btnIcon={<HiPlus />}
+              btnType="primary"
+              isLoading={loading}
+            />
           )}
         </form>
       </div>

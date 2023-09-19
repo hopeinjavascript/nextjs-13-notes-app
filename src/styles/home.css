@@ -27,11 +27,17 @@
   text-decoration: underline;
 }
 
-.hero-left * {
+.hero-left > * {
   margin-bottom: 2rem;
 }
 
 .btn-hero {
   font-size: 1.25rem;
   margin: 1rem 0 0 0;
+  box-shadow: 0 8px 20px rgba(var(--font-color-rgb), 0.2);
+}
+
+.btn-hero:hover svg {
+  transform: translateX(3px);
+  transition: all 100ms ease;
 }
