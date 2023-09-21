@@ -27,7 +27,7 @@ export default function Home() {
           <br /> your <Link href="/notes">notes</Link>
         </h1>
         <p className="secondary-headline">
-          Maintaining notes helps one to keep things to do in place. You don't
+          Maintaining notes helps one to keep things to do in place. You do not
           have to remember and keep counting on things that are important, just
           note them down and you are good to go. I encourage you to create and
           maintain one!

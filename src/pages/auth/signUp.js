@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import { FiUserPlus } from 'react-icons/fi';
 import IconButton from '@/components/IconButton';
+import Loader from '@/components/Loader';
 
 const SignUp = () => {
   const refForm = React.useRef(null);

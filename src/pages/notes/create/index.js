@@ -7,6 +7,7 @@ import { getSession, useSession } from 'next-auth/react';
 import { HiPlus } from 'react-icons/hi';
 import { AiOutlineEdit } from 'react-icons/ai';
 import IconButton from '@/components/IconButton';
+import Loader from '@/components/Loader';
 
 // Used as edit note component as well
 const CreateNote = () => {

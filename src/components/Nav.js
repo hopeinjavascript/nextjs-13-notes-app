@@ -20,7 +20,7 @@ const Nav = () => {
   return (
     <nav>
       <Link href="/" className="logo">
-        <Image src="/note-logo-color.png" width={35} height={35} />
+        <Image src="/note-logo-color.png" width={35} height={35} alt="logo" />
         <h6>
           <strong>Notes App</strong>
         </h6>
