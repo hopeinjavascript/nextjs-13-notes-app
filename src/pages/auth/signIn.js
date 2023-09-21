@@ -65,7 +65,7 @@ const SignIn = () => {
             <input
               type="email"
               placeholder="Enter email"
-              defaultValue="akshaysood@gmail.com"
+              // defaultValue="akshaysood@gmail.com"
             />
           </div>
           <div className={styles.form_input}>
@@ -73,7 +73,7 @@ const SignIn = () => {
             <input
               type="password"
               placeholder="Enter password"
-              defaultValue="akshaysood"
+              // defaultValue="akshaysood"
             />
           </div>
 
