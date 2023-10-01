@@ -5,6 +5,7 @@ import { getSession } from 'next-auth/react';
 import { FiUserPlus } from 'react-icons/fi';
 import IconButton from '@/components/IconButton';
 import Loader from '@/components/Loader';
+import { toast } from 'react-toastify';
 
 const SignUp = () => {
   const refForm = React.useRef(null);
@@ -37,13 +38,15 @@ const SignUp = () => {
       const data = await res.json();
 
       if (data.msg === 'User/Email already exists') {
+        setLoading(false);
+        toast(`${data.msg}`, { type: 'error' });
         return refForm.current.reset(); // OR return e.target.reset();
       }
 
+      toast(`${data.msg}`, { type: 'success' });
       router.push('/auth/signIn');
     } catch (error) {
       console.error(error);
-    } finally {
       setLoading(false);
     }
   };

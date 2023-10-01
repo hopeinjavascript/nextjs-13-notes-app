@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { FiLock } from 'react-icons/fi';
 import IconButton from '@/components/IconButton';
 import Loader from '@/components/Loader';
+import { toast } from 'react-toastify';
 
 const SignIn = () => {
   const refForm = React.useRef(null);
@@ -22,7 +23,7 @@ const SignIn = () => {
 
     if (!email || !password) {
       setLoading(false);
-      return alert('Fill in all the fields');
+      return toast(`Fill in all the fields`, { type: 'info' });
     }
 
     try {
@@ -34,9 +35,12 @@ const SignIn = () => {
       });
 
       // if (resp.ok) router.push(resp.url);
-      if (resp.ok) router.push(`${process.env.NEXT_PUBLIC_URL}/notes`);
+      if (resp.ok) return router.push(`${process.env.NEXT_PUBLIC_URL}/notes`);
+
+      toast(`${resp.error}`, { type: 'error' });
     } catch (error) {
       console.error(error);
+      toast(`${error.message}`, { type: 'error' });
     } finally {
       setLoading(false);
       refForm.current.reset(); // OR return e.target.reset();
@@ -101,7 +105,6 @@ const SignIn = () => {
 // to prevent from navigating to sign in page if user is already logged in
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-  console.log(session);
 
   if (session) {
     return {

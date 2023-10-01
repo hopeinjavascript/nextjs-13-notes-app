@@ -8,6 +8,7 @@ import { HiPlus } from 'react-icons/hi';
 import { AiOutlineEdit } from 'react-icons/ai';
 import IconButton from '@/components/IconButton';
 import Loader from '@/components/Loader';
+import { toast } from 'react-toastify';
 
 // Used as edit note component as well
 const CreateNote = () => {
@@ -44,6 +45,10 @@ const CreateNote = () => {
   const addNote = async (e) => {
     e.preventDefault();
 
+    if (!title || !desc) {
+      return toast(`Fill in all the fields`, { type: 'info' });
+    }
+
     setLoading(true);
 
     const note = {
@@ -58,19 +63,21 @@ const CreateNote = () => {
 
     if (error) {
       console.error(resp);
+      toast(resp.message, { type: 'error' });
       setError(true);
+      setLoading(false);
     } else {
-      setTitle('');
-      setDesc('');
-      router.push('/notes');
       setNotes((prevNotes) => [...prevNotes, resp.data]);
+      router.push('/notes');
     }
-
-    setLoading(false);
   };
 
   const editNote = async (e) => {
     e.preventDefault();
+
+    if (!title || !desc) {
+      return toast(`Fill in all the fields`, { type: 'info' });
+    }
 
     setLoading(true);
 
@@ -85,10 +92,10 @@ const CreateNote = () => {
 
     if (error) {
       console.error(resp);
+      toast(resp.message, { type: 'error' });
       setError(true);
+      setLoading(false);
     } else {
-      setTitle('');
-      setDesc('');
       const updatedNotes = notes.map((note) => {
         if (note._id === resp.data._id) {
           return resp.data;
@@ -99,8 +106,6 @@ const CreateNote = () => {
       setNotes(updatedNotes);
       router.push('/notes');
     }
-
-    setLoading(false);
   };
 
   return (

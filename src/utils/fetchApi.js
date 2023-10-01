@@ -1,3 +1,5 @@
+import { HTTP_STATUS_CODES } from './setResponse';
+
 const getFetchApiOptions = (method, body) => {
   return {
     method,
@@ -20,9 +22,16 @@ export default function useFetch() {
         ...opts,
         signal,
       });
+
       if (!res.ok) throw new Error('Network error');
 
-      const data = await res.json();
+      if ([HTTP_STATUS_CODES.NO_CONTENT].includes(res.status)) {
+        const errObj = new Error(res.statusText);
+        errObj.code = res.status;
+        throw errObj;
+      }
+
+      const data = await res?.json();
 
       return {
         error: false,
@@ -64,7 +73,7 @@ export async function fetchNoteById(context, noteId) {
     },
     signal,
   });
-  console.log(res);
+
   if (!res.ok) throw new Error('Network error');
 
   const notes = await res.json();
