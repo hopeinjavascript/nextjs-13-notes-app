@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 import NoteModel from '@/models/note';
 import connectToDB from '@/connections/mongoose';
+import setResponse from '@/utils/setResponse';
 // import { getSession } from 'next-auth/react'; // to be use on server side - getServerSideProps, getStat
 // import { getToken } from 'next-auth/jwt';
 
@@ -15,11 +16,14 @@ export default async function handler(req, res, next) {
   //   secret: process.env.NEXTAUTH_SECRET,
   // });
 
+  const response = setResponse(res);
+
   // TODO: change session.expires value, currently it is one month
   const session = await getServerSession(req, res, authOptions);
 
-  if (!session)
-    return res.json({ msg: 'you are not authenticated', status: 401 });
+  if (!session) {
+    return response.unauthorized('you are not authenticated');
+  }
 
   const apiHandlers = {
     GET: async () => {
@@ -28,14 +32,16 @@ export default async function handler(req, res, next) {
         createdBy: session?.user.id,
       }).populate('createdBy', 'name username email');
 
-      res.status(200).json({
-        msg: 'Notes',
-        status: 200,
-        data: notes,
-      });
+      return response.success('Notes', notes);
     },
     POST: async () => {
       await connectToDB();
+
+      const { title, desc } = req.body;
+
+      if (!title || !desc) {
+        return response.badRequest('Fill in all the fields');
+      }
 
       const note = {
         // id: notes.length + 1,
@@ -48,16 +54,13 @@ export default async function handler(req, res, next) {
       const newNote = new NoteModel(note);
       let savedNote = await newNote.save();
 
+      if (!savedNote) {
+        return response.internalServerError('Error creating note');
+      }
+
       savedNote = await savedNote.populate('createdBy', 'name username email');
 
-      if (!savedNote)
-        return res.json({ msg: 'Error creating note', status: 500 });
-
-      return res.json({
-        msg: 'Note created',
-        status: 200,
-        data: savedNote,
-      });
+      return response.created('Note created', savedNote);
     },
   };
 

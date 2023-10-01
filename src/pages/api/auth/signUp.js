@@ -1,9 +1,12 @@
 import connectToDB from '@/connections/mongoose';
 import UserModel from '@/models/user';
 import bcrypt from 'bcryptjs';
+import setResponse from '@/utils/setResponse';
 
 // req, res, next are standard node js's objects
 export default async function handler(req, res, next) {
+  const response = setResponse(res);
+
   const apiHandlers = {
     POST: async () => {
       await connectToDB();
@@ -11,12 +14,11 @@ export default async function handler(req, res, next) {
       const { name, email, username, password } = req.body;
 
       if (!name || !email || !password)
-        return res.json({ msg: 'All fields are required', status: 400 });
+        return response.badRequest('All fields are required');
 
       const user = await UserModel.findOne({ email });
 
-      if (user?.email)
-        return res.json({ msg: 'User/Email already exists', status: 400 });
+      if (user?.email) return response.badRequest('User/Email already exists');
 
       req.body['username'] = username
         ? username
@@ -34,14 +36,9 @@ export default async function handler(req, res, next) {
       const newUser = new UserModel(req.body);
       const savedUser = await newUser.save();
 
-      if (!savedUser)
-        return res.json({ msg: 'Signup unsuccessful', status: 500 });
+      if (!savedUser) return response.internalServerError('Signup failed');
 
-      return res.json({
-        msg: 'Sign Up Successful',
-        status: 200,
-        data: savedUser,
-      });
+      return response.success('Signup Successful', savedUser);
     },
   };
 

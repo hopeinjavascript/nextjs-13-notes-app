@@ -1,57 +1,45 @@
 import NoteModel from '@/models/note';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
+import setResponse from '@/utils/setResponse';
 
 // req, res, next are standard node js's objects
 export default async function handler(req, res, next) {
+  const response = setResponse(res);
+
   const session = await getServerSession(req, res, authOptions);
 
-  if (!session)
-    return res.json({ msg: 'you are not authenticated', status: 401 });
+  if (!session) return response.unauthorized('you are not authenticated');
 
   const apiHandlers = {
     GET: async () => {
       const { noteId } = req.query;
 
-      if (!noteId)
-        return res
-          .status(200)
-          .json({ msg: 'Note id is required', status: 400 });
+      if (!noteId) return response.badRequest('Note id is required');
 
       const note = await NoteModel.findById({ _id: noteId });
 
       if (!note)
-        return res.json({
-          msg: 'No note found with provided id ' + noteId,
-          status: 500,
-        });
+        return response.notFound('No note found with provided id ' + noteId);
 
-      res.status(200).json({ msg: 'Note', status: 200, data: note });
+      return response.success('Note', note);
     },
     DELETE: async () => {
       const { noteId } = req.query;
 
-      if (!noteId)
-        return res
-          .status(200)
-          .json({ msg: 'Note id is required', status: 400 });
+      if (!noteId) return response.badRequest('Note id is required');
 
       const deletedNote = await NoteModel.findByIdAndDelete({ _id: noteId });
 
       if (!deletedNote)
-        return res.json({ msg: 'Error deleting note', status: 500 });
+        return response.internalServerError('Error deleting note');
 
-      res
-        .status(200)
-        .json({ msg: 'Deleted Note', status: 200, data: deletedNote });
+      return response.success('Note deleted', deletedNote);
     },
     PATCH: async () => {
       const { noteId } = req.query;
 
-      if (!noteId)
-        return res
-          .status(200)
-          .json({ msg: 'Note id is required', status: 400 });
+      if (!noteId) return response.badRequest('Note id is required');
 
       let editedNote = await NoteModel.findByIdAndUpdate(
         { _id: noteId },
@@ -65,11 +53,9 @@ export default async function handler(req, res, next) {
       );
 
       if (!editedNote)
-        return res.json({ msg: 'Error editing note', status: 500 });
+        return response.internalServerError('Error editing note');
 
-      res
-        .status(200)
-        .json({ msg: 'Edited Note', status: 200, data: editedNote });
+      return response.success('Note edited', editedNote);
     },
   };
 
